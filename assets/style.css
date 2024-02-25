@@ -1,0 +1,264 @@
+/* assets/style.css */
+
+/* Fixed sidebar for large screens */
+@media (min-width: 992px) {
+    .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 16rem;
+        padding: 2rem 1rem;
+        background-color: #f8f9fa;
+    }
+
+    /* Padding for the filter container to avoid overlap with the sidebar */
+    .year-filter-container {
+        padding-left: 18rem; /* Should match sidebar width */
+    }
+
+    /* Adjust the segment filter to align to the end */
+    .segment-filter-container {
+        display: flex;
+        justify-content: flex-end;
+    }
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 991.98px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative; /* Sidebar comes into normal flow */
+    }
+
+    .year-filter-container,
+    .segment-filter-container {
+        padding-left: 0; /* Reset padding as sidebar is no longer fixed */
+    }
+}
+
+/* Style for active and hover states of sidebar links */
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+
+/* Style for the filter bar at the top of the page */
+/* .filter-bar {
+    background-color: #ffffff;
+    padding: 10px 0;
+    z-index: 10;
+}
+
+/* Styles for filter labels and dropdowns */
+.filter-label {
+    font-weight: bold;
+    color: #333;
+} */
+
+.year-slider,
+.segment-dropdown {
+    width: 100%; /* Ensures the components take the full width of their container */
+}
+
+
+
+/* Custom styling for tabs */
+/* Custom styling for tabs */
+.nav-tabs {
+    margin-left: 16rem; /* Offset the tabs from the sidebar */
+}
+
+.nav-tabs .nav-item {
+    margin-bottom: -1px; /* Align the tabs tightly with the content below */
+}
+
+.nav-tabs .nav-link {
+    border: 1px solid #dee2e6; /* Make borders visible */
+    border-radius: 0.5rem 0.5rem 0 0; /* Round the top corners a bit more */
+    background-color: #f8f9fa; /* Slightly different background for tabs */
+    color: #6c757d; /* Muted text color for tabs */
+    font-size: 1.25rem; /* Make the text larger */
+    padding: 0.75rem 1.5rem; /* Increase padding for a broader tab */
+}
+
+.nav-tabs .nav-link.active {
+    color: #495057; /* Active tab text color */
+    background-color: #e9ecef; /* Active tab background */
+    border-color: #dee2e6 #dee2e6 #fff; /* Borders for active tab */
+}
+
+/* Custom styling for the content of the active tab */
+.tab-content > .active {
+    border: 1px solid #dee2e6; /* Border around the active tab content */
+    border-top: none; /* Hide the top border to blend with the active tab */
+    padding: 1rem; /* Padding inside the tab content */
+}
+
+/* Ensure that tabs are not overlapped by the sidebar */
+@media (max-width: 991.98px) {
+    .nav-tabs {
+        margin-left: 1rem; /* Adjust margin for smaller screens */
+    }
+}
+
+/* Custom styling for tabs */
+
+
+
+
+/* Style for the main content area */
+#page-content {
+    margin-left: 18rem;
+    margin-right: 2rem;
+    padding: 2rem 1rem;
+}
+
+/* Style for the cards */
+.card {
+    margin: 0.5rem 0;
+    border: none;
+    border-radius: 0.5rem;
+}
+
+/* Card header styles */
+.card-header {
+    background-color: #E9ECEF;
+    color: #333;
+    border-radius: 0.5rem 0.5rem 0 0;
+    border: none;
+}
+
+/* Card body styles */
+.card-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Card title with icon 
+.card-title-icon {
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+/* Icons style */
+.fa-icon {
+    margin-right: 0.5rem;
+    font-size: 1.5rem;
+}
+
+/* Style for the card title */
+.card-title {
+    margin: 0;
+    font-weight: bold;
+    font-size: 1.5rem;
+}
+
+/* Style for the card text */
+.card-text {
+    margin: 0;
+}
+
+/* Colors for different cards based on the type */
+.card-sales {
+    background-color: #00005f;
+    color: #fff;
+}
+
+.card-orders {
+    background-color: #55c3f0;
+    color: #fff;
+}
+
+.card-profit {
+    background-color: #00005f;
+    color: #fff;
+}
+
+.card-customers {
+    background-color: #55c3f0;
+    color: #fff;
+}
+
+
+
+.filter-bar {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f8f9fa;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.custom-granularity-dropdown .Select-control {
+    padding: 6px 3px;
+    font-size: 15px;
+    align-items: center;
+    width: 65% !important; /* Important for width */
+}
+
+/* Custom styles for the date picker range to stretch full width */
+.custom-date-picker-range .DateRangePicker {
+    width: 100% !important; /* Ensure it takes the full width of its parent */
+}
+
+.custom-date-picker-range .DateRangePickerInput {
+    flex-direction: row;
+    justify-content: space-between; /* Space out the fields */
+    align-items: center; /* Vertically align the items */
+}
+
+.custom-date-picker-range .DateInput {
+    width: 45% !important; /* Adjusts the width of the individual input fields */
+}
+
+/* .custom-date-picker-range .DateInput_input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 0.25rem;
+    border: 1px solid #CCC;
+} */
+
+/* Adjusting the calendar icon */
+.custom-date-picker-range .DateRangePickerInput_calendarIcon {
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    border: none;
+}
+
+/* Hide the clear dates button */
+.custom-date-picker-range .DateRangePickerInput_clearDates {
+    display: none;
+}
+
+
+
+
+
+.filter-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+    display: block;
+}
+
+/* Align filters to the left */
+#page-content .filter-bar .row {
+    justify-content: start;
+}
+
+/* Responsive layout for smaller screens */
+@media (max-width: 768px) {
+    .filter-bar .row > [class^='col-'] {
+        width: 100%;
+    }
+    .filter-bar .row .col-6.mb-3 {
+        margin-bottom: 15px;
+    }
+}
