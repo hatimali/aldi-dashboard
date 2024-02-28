@@ -4,6 +4,7 @@ from dash import html, dcc, callback, Input, Output
 import dash_bootstrap_components as dbc
 from components.home.filters import get_filters
 from components.home.tabs.customer_demographics.demographics import get_demographics_data
+from components.home.tabs.customer_demographics.figures import create_delivery_mode_pie_chart
 from components.home.tabs.profit_analytics.profit_analytics import get_profit_analytics_data
 from components.home.tabs.sales_analytics.sales_analytics import get_sales_analytics_data
 from data.data_loader import load_data
@@ -73,3 +74,16 @@ def update_home_content(active_tab, selected_years, selected_segments):
         # return html.Div("Demographics content or another function to generate this content")
 
 
+# Define a callback for updating the delivery mode pie chart
+@callback(
+    Output('delivery-mode-pie-chart', 'figure'),
+    [Input('toggle-delivery-mode', 'value'),
+     Input('year-filter', 'value'),  # Assuming this filter affects the chart
+     Input('segment-filter', 'value')]  # Assuming this filter affects the chart
+)
+def update_delivery_mode_pie_chart(toggle_value, selected_years, selected_segments):
+    # Apply filters to the DataFrame as needed
+    filtered_df_current_year = df[(df['Year'].isin(selected_years)) & (df['Segment'].isin(selected_segments))]
+
+    # Call the function to create the pie chart based on the current filter
+    return create_delivery_mode_pie_chart(filtered_df_current_year, toggle_value)

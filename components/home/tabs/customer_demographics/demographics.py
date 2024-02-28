@@ -4,7 +4,7 @@ import dash_bootstrap_components as dbc
 from dash import html, dcc
 import plotly.graph_objs as go
 from plotly.subplots import make_subplots
-from components.home.tabs.customer_demographics.figures import create_profit_sales_figure_2, create_top_valuable_customers
+from components.home.tabs.customer_demographics.figures import create_delivery_mode_pie_chart, create_profit_sales_figure, create_top_profitable_state_fig, create_top_valuable_customers_fig, top_customers_with_max_product_purchased
 from preprocess_data.calculate_demographics_overview import calculate_demographic_overview
 
 
@@ -17,17 +17,31 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
 
     print("In get_demographics_data()")
     # Generate the figures based on the filtered data
+    profit_sales_fig = create_profit_sales_figure(filtered_df_current_year)
+    top_valuable_customers_fig = create_top_valuable_customers_fig(filtered_df_current_year)
+    top_profitable_states_fig = create_top_profitable_state_fig(filtered_df_current_year)
+    top_active_customers = top_customers_with_max_product_purchased(filtered_df_current_year)
 
-    profit_sales_fig = create_profit_sales_figure_2(filtered_df_current_year)
-    top_valuable_customers_fig = create_top_valuable_customers(filtered_df_current_year)
-    
+    # Initial pie chart for 'Sales by Delivery Mode'
+    delivery_mode_pie_chart_figure = create_delivery_mode_pie_chart(filtered_df_current_year, 'Sales')
+    # Add the toggle buttons and pie chart to the layout
+    toggle_buttons = dcc.RadioItems(
+        id='toggle-delivery-mode',
+        options=[
+            {'label': 'Sales', 'value': 'Sales'},
+            {'label': 'Profit', 'value': 'Profit'}
+        ],
+        value='Sales',  # default selected value
+        labelStyle={'display': 'inline-block', 'margin-right': '20px'},
+        className='my-3'  # Add margin for spacing (Bootstrap class)
+    )
 
     container = dbc.Container(fluid=True, children=[
         # Navbar - already defined outside of this function
         # Overview cards
         dbc.Row([
             dbc.Col(dbc.Card(
-                className="card-sales",  # Apply custom CSS class for styling
+                className="card-one",  # Apply custom CSS class for styling
                 children=[
                     dbc.CardHeader("Total Customers", className='card-header'),
                     dbc.CardBody([
@@ -38,7 +52,7 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
                     ])
                 ]), width=3),
             dbc.Col(dbc.Card(
-                className="card-sales",  # Apply custom CSS class for styling
+                className="card-two",  # Apply custom CSS class for styling
                 children=[
                     dbc.CardHeader("Total Orders", className='card-header'),
                     dbc.CardBody([
@@ -49,7 +63,7 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
                     ])
                 ]), width=3),
             dbc.Col(dbc.Card(
-                className="card-sales",  # Apply custom CSS class for styling
+                className="card-three",  # Apply custom CSS class for styling
                 children=[
                     dbc.CardHeader("Total Products", className='card-header'),
                     dbc.CardBody([
@@ -60,7 +74,7 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
                     ])
                 ]), width=3),
             dbc.Col(dbc.Card(
-                className="card-sales",  # Apply custom CSS class for styling
+                className="card-four",  # Apply custom CSS class for styling
                 children=[
                     dbc.CardHeader("Avg. Sales Per State", className='card-header'),
                     dbc.CardBody([
@@ -75,12 +89,20 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
         dbc.Row([
             dbc.Col(dcc.Graph(figure=profit_sales_fig), width=4, md=4, lg=4),
             dbc.Col(dcc.Graph(figure=top_valuable_customers_fig), width=4, md=4, lg=4),
-            dbc.Col(dcc.Graph(figure=profit_sales_fig), width=4, md=4, lg=4),
+            dbc.Col(dcc.Graph(figure=top_profitable_states_fig), width=4, md=4, lg=4),
         ]),
-        # dbc.Row([
-        #     dbc.Col(dcc.Graph(figure=fig3_line_chart), width=12),
-        #     # ... Add placeholders for fig4 and fig5
-        # ]),
+        dbc.Row([
+            dbc.Col([
+                toggle_buttons,
+                dcc.Graph(id='delivery-mode-pie-chart', figure=delivery_mode_pie_chart_figure),
+                # ... Placeholders for other figures if necessary ...
+            ], width=4),
+            dbc.Col(dcc.Graph(figure=top_active_customers), width=4, md=4, lg=4),
+
+            # dbc.Col(toggle_buttons, width={"size": 6, "offset": 3}),
+            # dbc.Col(dcc.Graph(id='delivery-mode-pie-chart', figure=delivery_mode_pie_chart_figure), width=12),
+            # ... Add placeholders for fig4 and fig5
+        ]),
 
         # dbc.Row([
         #     dbc.Col(dcc.Graph(figure=fig_sales_comparison), width=12),

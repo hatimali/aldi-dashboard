@@ -1,3 +1,4 @@
+import pandas as pd
 
 def calculate_sales_overview(df, selected_year):
     # Preprocess the data
@@ -65,22 +66,41 @@ def calculate_profit_overview(df, selected_year):
     except Exception as e:
         print(f"Error calculating profit overview: {e}")
 
+
 def calculate_monthly_sales(df, selected_years):
+    # Define month order
+    month_order = ['January', 'February', 'March', 'April', 'May', 'June', 
+                   'July', 'August', 'September', 'October', 'November', 'December']
+    
     # Calculate monthly sales for current and previous years
     current_year = int(selected_years[0])
     previous_year = current_year - 1
-
-    # Group by year and month
+        
+    # Group by year and month, summing the sales
     monthly_sales = df.groupby(['Year', 'Month'])['Sales'].sum().unstack('Year')
+    
+    # Fill missing months with zeros
+    for month in month_order:
+        if month not in monthly_sales.index:
+            monthly_sales.loc[month] = 0
+            
+    # Sort the index (months) according to the defined order
+    monthly_sales = monthly_sales.reindex(month_order)
     
     # Check if the previous year exists in the DataFrame
     if previous_year not in monthly_sales.columns:
         # If not, create a column for the previous year with zeros
         monthly_sales[previous_year] = 0
 
-
-    monthly_sales = monthly_sales[[previous_year, current_year]]
+    # Select and sort the columns for the previous and current year
+    monthly_sales = monthly_sales[[previous_year, current_year]].fillna(0)
     monthly_sales = monthly_sales.reindex(columns=sorted(monthly_sales.columns))
+
+    prev = monthly_sales[previous_year].sum()
+    current_year = monthly_sales[current_year].sum()
+
+    print(f"Total sales in Prev: {prev}")
+    print(f"Total sales in Current: {current_year}")
 
     return monthly_sales
 
