@@ -240,7 +240,17 @@
 }
 
 
+.form-control {
+    height: calc(1.5em + .75rem + 2px); /* Adjust height as needed */
+    padding: .375rem .75rem; /* Bootstrap default padding for form controls */
+    /* Any additional styles to match the DataTable */
+}
 
+.form-control-datepicker {
+    height: calc(1.5em + .75rem + 2px); /* Adjust height as needed */
+    padding: .375rem .75rem; /* Bootstrap default padding for form controls */
+    margin-top: -5px;
+}
 
 
 .filter-label {

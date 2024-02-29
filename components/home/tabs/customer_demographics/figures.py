@@ -155,7 +155,6 @@ def top_performing_products(df_current_year):
         template='plotly_white'  # Choose a template that fits your dashboard's theme
     )
 
-    # Assuming you're using this in a Dash app, you would return this figure where needed
     return fig
 
 

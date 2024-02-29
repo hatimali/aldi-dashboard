@@ -1,13 +1,12 @@
 import os
 import dash
-from dash.exceptions import PreventUpdate
 from dash import html, dcc, dash_table, callback, Input, Output, State
 import numpy as np
 # from dash.dependencies import Input, Output, State
 import pandas as pd
 import dash_bootstrap_components as dbc
 from datetime import datetime as dt
-from components.table.table_layout import generate_unique_options_for_dropdowns, get_table_input_fields
+from components.table.table_layout import generate_unique_options_for_dropdowns
 
 # Assuming 'df' is your DataFrame and already loaded
 from data.data_loader import load_data
@@ -15,17 +14,27 @@ from preprocess_data.preprocess_table_data import preprocess_table_data
 
 
 PAGE_SIZE = 25
-COLUMNS = ["Row ID", "Order ID", "Order Date", "Customer Name", 
-           "Segment", "Category", "Sub-Category", "Product Name", 
-           "Country/Region", "State/Province", "City", "Sale", "Profit", "Quantity"]
+COLUMNS = ["Row ID", "Order ID", "Order Date", "Customer Name", "Product Name",
+           "Segment", "Category", "Sub-Category", 
+           "Country/Region", "State/Province", "City", "Profit"]
 
-df = load_data()
+
+# df = get_dataframe()
+
+# df = load_data()
+if 'df' not in globals():
+    print("Global found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    global df
+    df = load_data()  # Function to load the original data
+    
+
+
 df = preprocess_table_data(df)
 
 # Register this file as a Dash page
 dash.register_page(__name__)
 
-input_fields = get_table_input_fields(df)
+# input_fields = get_table_input_fields(df)
 
 dropdown_options = generate_unique_options_for_dropdowns(df)
 
@@ -113,7 +122,7 @@ layout = html.Div([
     ]),
     dash_table.DataTable(
         id='datatable',
-        columns=[{"name": i, "id": i, "deletable": True, "selectable": True} for i in df.columns],
+        columns=[{"name": i, "id": i, "deletable": False, "selectable": True} for i in COLUMNS],
         # columns=[
         #     {"name": i, "id": i} for i in df.columns if i in ["Row ID", "Order ID", "Order Date", "Customer Name", "Segment", "Category", "Sub-Category", "Product Name", "Country/Region", "State/Province", "City", "Sale", "Profit", "Quantity"]
         # ],
@@ -123,89 +132,100 @@ layout = html.Div([
         page_size=PAGE_SIZE,
         filter_action="native",
         sort_action="native",
+        sort_mode='multi',
+        style_table={'maxHeight': '600px', 'overflowY': 'auto'},
+        style_cell={
+            'minWidth': '150px', 'width': '150px', 'maxWidth': '150px',
+            'overflow': 'hidden',
+            'textOverflow': 'ellipsis',
+            'padding': '10px'
+        },
+        style_header={
+            'backgroundColor': 'rgb(230, 230, 230)',
+            'fontWeight': 'bold',
+            'border': '1px solid black'
+        },
+        style_data_conditional=[
+            {'if': {'row_index': 'odd'}, 'backgroundColor': 'rgb(248, 248, 248)'}
+        ],
     ),
     dbc.Row([
-        dbc.Col(dcc.Input(id='input-row-id', type='number', placeholder='Row ID', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-order-id', type='text', placeholder='Order ID', className='form-control'), width=1),
-        dbc.Col(dcc.DatePickerSingle(id='input-order-date', placeholder='Order Date', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-customer-name', type='text', placeholder='Customer Name', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-segment', type='text', placeholder='Segment', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-category', type='text', placeholder='Category', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-sub-category', type='text', placeholder='Sub-Category', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-product-name', type='text', placeholder='Product Name', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-country-region', type='text', placeholder='Country/Region', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-state-province', type='number', placeholder='State/Province', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-city', type='text', placeholder='City', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-sale', type='text', placeholder='Sale', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-profit', type='text', placeholder='Profit', className='form-control'), width=1),
-        dbc.Col(dcc.Input(id='input-quantity', type='text', placeholder='Quantity', className='form-control'), width=1),
+        dbc.Col(dcc.Input(id='input-row-id', type='number', placeholder='Row ID', className='form-control')),
+        dbc.Col(dcc.Input(id='input-order-id', type='text', placeholder='Order ID', className='form-control')),
+        dbc.Col(dcc.DatePickerSingle(id='input-order-date', placeholder='Order Date', className='form-control-datepicker')),
+        dbc.Col(dcc.Input(id='input-customer-name', type='text', placeholder='Customer Name', className='form-control')),
+        dbc.Col(dcc.Input(id='input-product-name', type='text', placeholder='Product Name', className='form-control')),
+        dbc.Col(dcc.Input(id='input-segment', type='text', placeholder='Segment', className='form-control')),
+        dbc.Col(dcc.Input(id='input-category', type='text', placeholder='Category', className='form-control')),
+        dbc.Col(dcc.Input(id='input-sub-category', type='text', placeholder='Sub-Category', className='form-control')),
+        dbc.Col(dcc.Input(id='input-country-region', type='text', placeholder='Country/Region', className='form-control')),
+        dbc.Col(dcc.Input(id='input-state-province', type='number', placeholder='State/Province', className='form-control')),
+        dbc.Col(dcc.Input(id='input-city', type='text', placeholder='City', className='form-control')),
+        # dbc.Col(dcc.Input(id='input-sale', type='text', placeholder='Sale', className='form-control')),
+        dbc.Col(dcc.Input(id='input-profit', type='text', placeholder='Profit', className='form-control')),
+        # dbc.Col(dcc.Input(id='input-quantity', type='text', placeholder='Quantity', className='form-control')),
     ], className="mb-3"),
-    html.Button('Add Row', id='add-row-button', n_clicks=0),
-    html.Div(id='add-row-response'), # for adding response
-    # dbc.Alert(id='add-row-alert', dismissable=True, is_open=False),
+    dbc.Button('Add Row', id='add-row-button', n_clicks=0, color="primary", className="me-1", size="lg"),
+
+    html.Div(id='add-row-response', role='alert', style={'margin-top': '20px'})
 ])
-
-
-# callback(
-#     Output('datatable', 'data'),
-#     Input('add-row-button', 'n_clicks'),
-#     State('datatable', 'data')
-# )
-# def add_empty_row(n_clicks, rows):
-#     if n_clicks > 0:
-#         new_row = {col_id: "" for col_id in df.columns}  # Create an empty row
-#         rows.append(new_row)  # Append it to the existing data
-#     return rows
-
 
 
 @callback(
     Output('category-dropdown', 'options'),
+    Output('category-dropdown', 'value'),
     Input('segment-dropdown', 'value')
 )
 def set_category_options(selected_segment):
     if selected_segment:
         filtered_df = df[df['Segment'] == selected_segment]
-        return [{'label': i, 'value': i} for i in filtered_df['Category'].unique()]
+        category_options =  [{'label': i, 'value': i} for i in filtered_df['Category'].unique()]
+        return category_options, None
     else:
-        return []
+        return [], None
 
 
 @callback(
     Output('sub-category-dropdown', 'options'),
+    Output('sub-category-dropdown', 'value'),
     [Input('category-dropdown', 'value'),
      State('segment-dropdown', 'value')]
 )
 def set_sub_category_options(selected_category, selected_segment):
     if selected_segment and selected_category:
         filtered_df = df[(df['Segment'] == selected_segment) & (df['Category'] == selected_category)]
-        return [{'label': i, 'value': i} for i in filtered_df['Sub-Category'].unique()]
+        sub_category_options = [{'label': i, 'value': i} for i in filtered_df['Sub-Category'].unique()]
+        return sub_category_options, None
     else:
-        return []
+        return [], None
 
 
 @callback(
     Output('state-dropdown', 'options'),
+    Output('state-dropdown', 'value'),
     Input('country-dropdown', 'value')
 )
 def set_state_options(selected_country):
     if selected_country:
         filtered_df = df[df['Country/Region'] == selected_country]
-        return [{'label': i, 'value': i} for i in filtered_df['State/Province'].unique()]
+        state_options = [{'label': i, 'value': i} for i in filtered_df['State/Province'].unique()]
+        return state_options, None
     else:
-        return []
+        return [], None
 
 
 @callback(
     Output('city-dropdown', 'options'),
+    Output('city-dropdown', 'value'),
     Input('state-dropdown', 'value')
 )
 def set_city_options(selected_state):
     if selected_state:
         filtered_df = df[df['State/Province'] == selected_state]
-        return [{'label': i, 'value': i} for i in filtered_df['City'].unique()]
+        city_options =  [{'label': i, 'value': i} for i in filtered_df['City'].unique()]
+        return city_options, None
     else:
-        return []
+        return [], None
 
 @callback(
     [Output('datatable', 'data'), Output('datatable', 'page_size'), Output('add-row-response', 'children')],
@@ -216,96 +236,74 @@ def set_city_options(selected_state):
      Input('date-picker-range', 'end_date'), Input('add-row-button', 'n_clicks')],
     [State('datatable', 'data'), State('input-row-id', 'value'), 
      State('input-order-id', 'value'), State('input-order-date', 'value'), 
-     State('input-customer-name', 'value'), State('input-segment', 'value'), 
-     State('input-category', 'value'), State('input-sub-category', 'value'), 
-     State('input-product-name', 'value'), State('input-country-region', 'value'), 
+     State('input-customer-name', 'value'), State('input-product-name', 'value'),
+     State('input-segment', 'value'), State('input-category', 'value'), 
+     State('input-sub-category', 'value'), State('input-country-region', 'value'), 
      State('input-state-province', 'value'), State('input-city', 'value'), 
-     State('input-sale', 'value'), State('input-profit', 'value'), 
-     State('input-quantity', 'value')]
+     State('input-profit', 'value')]
 )
 def update_table_content(selected_sub_category, selected_segment, selected_category, selected_country, 
                          selected_state, selected_city, selected_size, start_date, end_date, n_clicks, rows,
-                         input_row_id, input_order_id, input_order_date, input_customer_name, input_segment, 
-                         input_category, input_sub_category, input_product_name, input_country_region, 
-                         input_state_province, input_city, input_sale, input_profit, input_quantity):
+                         input_row_id, input_order_id, input_order_date, input_customer_name, input_product_name, 
+                         input_segment, input_category, input_sub_category, input_country_region, 
+                         input_state_province, input_city, input_profit):
     
     ctx = dash.callback_context
-
-    # Load original data
-    global original_df
-    if 'original_df' not in globals():
-        original_df = load_data()  # Function to load the original data
-
-    # filtered_df = df
     if ctx.triggered:
         trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
         if trigger_id == 'add-row-button' and n_clicks > 0:
             # Validate inputs
             print("Validating Input")
-            if not all([input_row_id, input_order_id, input_customer_name]):
-                print("not all!!!")
-                print(input_row_id)
-                print(input_order_id)
-                print(input_order_date)
-                print(input_customer_name)
-                return original_df.to_dict('records'), selected_size, "Error: Please fill in all required fields."
-            
-            # Check for duplicate Row ID
-            if input_row_id in original_df['Row ID'].values:
-                return original_df.to_dict('records'), selected_size, "Error: Duplicate Row ID."
+            if not all([input_row_id, input_order_id, input_customer_name, input_product_name]):
+                return df.to_dict('records'), selected_size, dbc.Alert("Error adding row. The required fields include Row ID, Order ID, Order Date, Customer Name, Product Name.", color="info", is_open=True, 
+                       style={"width": "100%", "text-align": "center", "fontSize": "20px"})
             
 
-            new_row = {col: np.nan for col in original_df.columns}  # Default all columns to NaN
+            row_ids = [item['Row ID'] for item in rows]
+            # Check for duplicate Row ID
+            if input_row_id in row_ids:
+                return df.to_dict('records'), selected_size, dbc.Alert("Error duplicate ID. Please add unique ID.", color="danger", is_open=True, 
+                       style={"width": "100%", "text-align": "center", "fontSize": "20px"})
+            
 
             # Create the new row dictionary
-            input_fields = {
+            new_row = {
                 'Row ID': input_row_id,
                 'Order ID': input_order_id,
                 'Order Date': pd.to_datetime(input_order_date) if input_order_date else np.nan,
                 'Customer Name': input_customer_name,
+                'Product Name': input_product_name,
                 'Segment': input_segment,
                 'Category': input_category,
                 'Sub-Category': input_sub_category,
-                'Product Name': input_product_name,
                 'Country/Region': input_country_region,
                 'State/Province': input_state_province,
                 'City': input_city,
-                'Sale': input_sale,
+                # 'Sale': input_sale,
                 'Profit': input_profit,
-                'Quantity': input_quantity
+                # 'Quantity': input_quantity
             }
 
-            # # Update new_row with input values
-            new_row.update(input_fields)
-
-            # # print(f"Original df Info: {original_df.info()}")
-    
-            # # # original_df = original_df.append(new_row, ignore_index=True)
-            original_df.loc[len(original_df)] = new_row
-
-
-
-
-            # new_row = pd.DataFrame(np.nan, index=[0], columns=original_df.columns)
-            # for column, value in user_input.items():
-            #     if column in new_row.columns:
-            #         new_row[column] = value
-
-            # updated_df = pd.concat([original_df, new_row], ignore_index=True)
-
+            df.loc[len(df)] = new_row
+            rows.append(new_row)
 
             # Save to Excel
-            # file_name = 'NEW-EU-Superstore.xls'
-            # original_df.to_excel('TEST.xls')
-            # with pd.ExcelWriter('test.xsl', engine='xlsxwriter') as writer:
-            #     original_df.to_excel(writer, sheet_name='Orders', index=False)
+            file_name = os.getcwd()+'\data\Table - EU Superstore.xlsx'
+            df_test = pd.DataFrame(rows, columns=COLUMNS)  
+            # df_test.to_excel('TEST.xls')
+            with pd.ExcelWriter(file_name) as writer:
+                df_test.to_excel(writer, sheet_name='Orders', index=False)
 
             print("save it to file")
             # Update response
-            return original_df.to_dict('records'), selected_size, "Row added successfully."
+            return df.to_dict('records'), selected_size, dbc.Alert(
+                "Row Added Successfully!", 
+                color="success", 
+                is_open=True, 
+                style={"width": "100%", "text-align": "center", "fontSize": "20px"})
 
-    filtered_df = original_df.copy()
+    filtered_df = df.copy()
     # Handle case where no inputs have been triggered
     if start_date and end_date:
         filtered_df = filtered_df[
@@ -326,5 +324,4 @@ def update_table_content(selected_sub_category, selected_segment, selected_categ
         filtered_df = filtered_df[filtered_df['City'] == selected_city]
     
 
-
-    return filtered_df.to_dict('records'), selected_size, "Data Filtered Successfully!"
+    return filtered_df.to_dict('records'), selected_size, ''

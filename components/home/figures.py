@@ -223,16 +223,17 @@ def create_top_line_product_figure(top_products, column):
     fig_top_products.update_traces(texttemplate='%{text:.2s}%', textposition='outside')
     fig_top_products.update_layout(showlegend=False)
     fig_top_products.update_layout(
-        xaxis_title="Product Name",
-        yaxis_title=f"{column}",
+        xaxis_title=f"{column}",
+        yaxis_title="Product Name",
         title={
             'text': f"Top 5 {label} Products",
             'y':0.9,
             'x':0.5,
             'xanchor': 'center',
             'yanchor': 'top'},
-        title_font=dict(size=25),
+        # title_font=dict(size=25),
         autosize=True,
+        template="plotly_white",
         margin=dict(l=50, r=50, b=100, t=100, pad=4),
     )
     fig_top_products.update_traces(marker_color='#55c3f0')

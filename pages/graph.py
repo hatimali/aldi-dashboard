@@ -58,7 +58,7 @@ layout = html.Div([
                 dcc.Dropdown(
                     id='xaxis-dropdown',
                     options=[{'label': prop, 'value': prop} for prop in df.columns if prop in ['Days to Ship', 'Discount', 'Profit', 'Profit Ratio', 'Quantity', 'Returns', 'Sales']],
-                    value='Days to Ship',  # Default value
+                    value='Profit',  # Default value
                 ),
             ]), md=3),
         ]),
@@ -90,10 +90,10 @@ layout = html.Div([
         ]),
         dbc.Row([
             dbc.Col(html.Div([
-                dcc.Graph(id='timeline-graph', style={'height': '700px'})
+                dcc.Graph(id='timeline-graph', style={'height': '650px'})
             ]), md=6),
             dbc.Col(html.Div([
-                dcc.Graph(id='bubble-chart', style={'height': '700px'})
+                dcc.Graph(id='bubble-chart', style={'height': '650px'})
             ]), md=6),
         ], align="start"),  # This ensures that the row starts from the same point
     ], fluid=True)
@@ -167,7 +167,7 @@ def update_bubble_chart(start_date, end_date, granularity, xaxis_prop, yaxis_pro
         'x': xaxis_prop,
         'y': yaxis_prop,
         'hover_name': 'Order Date',
-        'title': 'Bubble Chart',
+        'title': f'{xaxis_prop} vs {yaxis_prop}',
         'labels': {xaxis_prop: xaxis_prop, yaxis_prop: yaxis_prop},
     }
 

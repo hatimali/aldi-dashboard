@@ -2,12 +2,15 @@ import plotly.express as px
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 from components.home.figures import create_fig_by_category_sub_category, create_geographical_map, create_pie_fig_by_segment, create_top_line_product_figure, create_year_by_year_comparision
-from preprocess_data.calculate_dashboard_overview import calculate_monthly_profit, calculate_profit_overview, calculate_top_products_by_profit
+from preprocess_data.calculate_dashboard_overview import calculate_monthly_sales_profit_data, calculate_profit_overview, calculate_top_products_by_profit
 
 def get_profit_analytics_data(filtered_df, filtered_df_current_year, selected_years):
     preprocessed_data = calculate_profit_overview(filtered_df, selected_years)
     print(f"preprocessed_data profit: {preprocessed_data}")
-    monthly_profit = calculate_monthly_profit(filtered_df, selected_years)
+    # monthly_profit = calculate_monthly_profit(filtered_df, selected_years)
+
+    monthly_profit = calculate_monthly_sales_profit_data(filtered_df, selected_years, column='Profit')
+
     print(f"monthly_profit: {monthly_profit}")
     top_products = calculate_top_products_by_profit(filtered_df, selected_years)
 
@@ -18,8 +21,6 @@ def get_profit_analytics_data(filtered_df, filtered_df_current_year, selected_ye
     fig_year_by_year_comparision = create_year_by_year_comparision(monthly_profit, selected_years, column='Profit')
     fig_geogrpahical_map = create_geographical_map(filtered_df_current_year, column='Profit')
     fig_top_products = create_top_line_product_figure(top_products, column='Profit')
-
-    # Continue to update other figures...
 
     container = dbc.Container(fluid=True, children=[
         # Overview cards

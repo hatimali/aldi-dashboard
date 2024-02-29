@@ -2,14 +2,14 @@ import plotly.express as px
 import dash_bootstrap_components as dbc
 from dash import html, dcc
 from components.home.figures import create_fig_by_category_sub_category, create_geographical_map, create_pie_fig_by_segment, create_top_line_product_figure, create_year_by_year_comparision
-from preprocess_data.calculate_dashboard_overview import calculate_monthly_sales, calculate_sales_overview, calculate_top_product_with_sales
+from preprocess_data.calculate_dashboard_overview import calculate_monthly_sales_profit_data, calculate_sales_overview, calculate_top_product_with_sales
 
 
 def get_sales_analytics_data(filtered_df, filtered_df_current_year, selected_years):
         preprocessed_data = calculate_sales_overview(filtered_df, selected_years)
         print(f"preprocessed_data: {preprocessed_data}")
-        monthly_sales = calculate_monthly_sales(filtered_df, selected_years)
-        top_products = calculate_top_product_with_sales(filtered_df, selected_years)
+        monthly_sales = calculate_monthly_sales_profit_data(filtered_df, selected_years, column='Sales')
+        top_products = calculate_top_product_with_sales(filtered_df_current_year, selected_years)
         
 
         print("In get_sales_analytics_data()")
@@ -66,7 +66,7 @@ def get_sales_analytics_data(filtered_df, filtered_df_current_year, selected_yea
                         dbc.CardBody([
                             html.H4([
                                 html.I(className="fa fa-money fa-icon"),  # Icon with Font Awesome class
-                                f"{preprocessed_data['yoy_growth_current_year'].iloc[0]:,.0f}"  # Display total sales
+                                f"{preprocessed_data['yoy_growth_current_year'].iloc[0]:,.0f}%"  # Display total sales
                             ], className='card-title'),
                         ])
                     ]), width=3),

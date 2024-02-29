@@ -11,13 +11,9 @@ from preprocess_data.calculate_demographics_overview import calculate_demographi
 def get_demographics_data(filtered_df, filtered_df_current_year, selected_years):
     preprocessed_data = calculate_demographic_overview(filtered_df_current_year, selected_years)
     print(f"demographic_overview: {preprocessed_data}")
-    #monthly_sales = calculate_monthly_sales(filtered_df, selected_years)
-    #top_products = calculate_top_product_with_sales(filtered_df, selected_years)
-    
-
     print("In get_demographics_data()")
     # Generate the figures based on the filtered data
-    profit_sales_fig = create_profit_sales_figure(filtered_df_current_year)
+    region_profit_sales_fig = create_profit_sales_figure(filtered_df_current_year)
     top_valuable_customers_fig = create_top_valuable_customers_fig(filtered_df_current_year)
     top_profitable_states_fig = create_top_profitable_state_fig(filtered_df_current_year)
     top_active_customers = top_customers_with_max_product_purchased(filtered_df_current_year)
@@ -41,7 +37,7 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
         # Overview cards
         dbc.Row([
             dbc.Col(dbc.Card(
-                className="card-one",  # Apply custom CSS class for styling
+                className="card-one",
                 children=[
                     dbc.CardHeader("Total Customers", className='card-header'),
                     dbc.CardBody([
@@ -52,7 +48,7 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
                     ])
                 ]), width=3),
             dbc.Col(dbc.Card(
-                className="card-two",  # Apply custom CSS class for styling
+                className="card-two",
                 children=[
                     dbc.CardHeader("Total Orders", className='card-header'),
                     dbc.CardBody([
@@ -63,7 +59,7 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
                     ])
                 ]), width=3),
             dbc.Col(dbc.Card(
-                className="card-three",  # Apply custom CSS class for styling
+                className="card-three",
                 children=[
                     dbc.CardHeader("Total Products", className='card-header'),
                     dbc.CardBody([
@@ -74,7 +70,7 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
                     ])
                 ]), width=3),
             dbc.Col(dbc.Card(
-                className="card-four",  # Apply custom CSS class for styling
+                className="card-four",
                 children=[
                     dbc.CardHeader("Avg. Sales Per State", className='card-header'),
                     dbc.CardBody([
@@ -87,7 +83,7 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
         ]),
         # Graphs Section
         dbc.Row([
-            dbc.Col(dcc.Graph(figure=profit_sales_fig), width=4, md=4, lg=4),
+            dbc.Col(dcc.Graph(figure=region_profit_sales_fig), width=4, md=4, lg=4),
             dbc.Col(dcc.Graph(figure=top_valuable_customers_fig), width=4, md=4, lg=4),
             dbc.Col(dcc.Graph(figure=top_profitable_states_fig), width=4, md=4, lg=4),
         ]),
@@ -98,27 +94,7 @@ def get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
                 # ... Placeholders for other figures if necessary ...
             ], width=4),
             dbc.Col(dcc.Graph(figure=top_active_customers), width=4, md=4, lg=4),
-
-            # dbc.Col(toggle_buttons, width={"size": 6, "offset": 3}),
-            # dbc.Col(dcc.Graph(id='delivery-mode-pie-chart', figure=delivery_mode_pie_chart_figure), width=12),
-            # ... Add placeholders for fig4 and fig5
         ]),
-
-        # dbc.Row([
-        #     dbc.Col(dcc.Graph(figure=fig_sales_comparison), width=12),
-        #     # ... Repeat for other overview cards
-        # ]),
-        
-
-        # Top 5 Selling Products and Sales Mapping by Country
-        # dbc.Row([
-        #     dbc.Col(html.Div([
-        #         html.H5('Top 5 Selling Products'),
-        #         # Add a table or list group for Top 5 Selling Products
-        #     ]), width=12, md=6, lg=6),
-        #     dbc.Col(dcc.Graph(figure=fig2), width=12, md=6, lg=6),  # Placeholder for fig6
-        # ]),
-        # ... Continue for the rest of your layout as per the sections
     ])
     
     return html.Div(container)
