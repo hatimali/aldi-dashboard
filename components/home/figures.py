@@ -4,14 +4,14 @@ import plotly.graph_objs as go
 
 def create_pie_fig_by_segment(filtered_df_current_year, column):
     segmented_profit = filtered_df_current_year.groupby('Segment')[[column]].sum().reset_index()
-    colors = ['#bbeaff', '#00005f', '#ff7800', '#55c3f0']  # Define your custom colors
+    colors = ['#bbeaff', '#00005f', '#ff7800', '#55c3f0']
     fig = go.Figure(data=[
         go.Pie(
             labels=segmented_profit['Segment'],
             values=segmented_profit[column],
             hole=0.6,  # This creates a donut chart
-            hoverinfo='label+percent',  # Show label and percentage on hover
-            textinfo='percent',  # Show only the percentage in the chart
+            hoverinfo='label+percent',
+            textinfo='percent', 
             marker=dict(colors=colors, line=dict(color='#55c3f0', width=1)),
         )
     ])
@@ -220,7 +220,7 @@ def create_top_line_product_figure(top_products, column):
         title='Top 5 Selling Products')
 
     # Update the layout and the traces for a better look
-    fig_top_products.update_traces(texttemplate='%{text:.2s}%', textposition='outside')
+    fig_top_products.update_traces(texttemplate='%{text:.0f}%', textposition='inside')
     fig_top_products.update_layout(showlegend=False)
     fig_top_products.update_layout(
         xaxis_title=f"{column}",

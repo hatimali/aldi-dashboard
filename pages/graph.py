@@ -9,7 +9,6 @@ from preprocess_data.preprocess_graph_data import prepare_data
 from dash.exceptions import PreventUpdate
 
 df, df_returns = load_data_for_graph()
-# df_returns = load_data_for_returns()
 df = prepare_data(df, df_returns)
 
 date_picker_range, granularity_dropdown, color_category_dropdown  = get_graph_filters_2(df)
@@ -40,6 +39,7 @@ layout = html.Div([
                 html.Label("Select Metric", className='filter-label'),
                 dcc.Dropdown(
                     id='metric-dropdown',
+                    clearable=False,
                     options=[
                         {'label': 'Days to Ship', 'value': 'Days to Ship'},
                         {'label': 'Discount', 'value': 'Discount'},
@@ -64,8 +64,6 @@ layout = html.Div([
         ]),
         dbc.Row([
             dbc.Col(html.Div([
-                # html.Label("Select Date Range", className='filter-label'),
-                # date_picker_range
             ]), md=3),
             dbc.Col(width=4),  # This creates space in the middle
             dbc.Col(html.Div([
@@ -120,7 +118,6 @@ def update_bubble_chart(start_date, end_date, granularity, xaxis_prop, yaxis_pro
     print(f"End date: {end_date}")
     filtered_df = df.loc[(df['Order Date'] >= pd.to_datetime(start_date)) & (df['Order Date'] <= pd.to_datetime(end_date))]
 
-    # Create bins based on granularity and map each data point to a bin
     if granularity == 'ME':
         filtered_df['Order Date'] = filtered_df['Order Date'].dt.strftime('%Y-%m')
     elif granularity == 'W':
@@ -130,16 +127,13 @@ def update_bubble_chart(start_date, end_date, granularity, xaxis_prop, yaxis_pro
     elif granularity == 'Y':
         filtered_df['Order Date'] = filtered_df['Order Date'].dt.to_period('Y').astype(str)
 
-    # Group by 'Order Date' and aggregate
     if color_prop:
-        # Aggregate including the color property
         grouped_df = filtered_df.groupby('Order Date').agg({
             xaxis_prop: 'sum',
             yaxis_prop: 'sum',
             color_prop: 'first'  # or any other logic to assign a segment to the bin
         }).reset_index()
     else:
-        # Aggregate without the color property
         grouped_df = filtered_df.groupby('Order Date').agg({
             xaxis_prop: 'sum',
             yaxis_prop: 'sum'
@@ -155,14 +149,9 @@ def update_bubble_chart(start_date, end_date, granularity, xaxis_prop, yaxis_pro
         {'label': 'Sales', 'value': 'Sales'}
     ]
     
-    # Update Dropdown options by excluding the selected property in the opposite dropdown
     xaxis_options = [option for option in all_options if option['value'] != yaxis_prop]
     yaxis_options = [option for option in all_options if option['value'] != xaxis_prop]
 
-    print(f"Buble dataframe: {grouped_df}")
-
-
-    # Setup for Plotly Express scatter plot
     scatter_kwargs = {
         'x': xaxis_prop,
         'y': yaxis_prop,
@@ -171,13 +160,11 @@ def update_bubble_chart(start_date, end_date, granularity, xaxis_prop, yaxis_pro
         'labels': {xaxis_prop: xaxis_prop, yaxis_prop: yaxis_prop},
     }
 
-    # Conditionally add color if color_prop is specified
     if color_prop:
         scatter_kwargs['color'] = color_prop
 
-    # Generate the Bubble Chart
     fig = px.scatter(grouped_df, **scatter_kwargs)
-    fig.update_layout(transition_duration=500)
+    fig.update_layout(transition_duration=500, template='plotly_white')
 
     return fig, xaxis_options, yaxis_options
 
@@ -210,16 +197,14 @@ def update_graph(start_date, end_date, granularity, selected_metric):
     elif granularity == 'Y':
         filtered_df = filtered_df.resample('YE')[selected_metric].sum().reset_index()
 
+    filtered_df = filtered_df.sort_values('Order Date')
 
-    # print("*****************************************************")
-    # print(filtered_df['Order Date'])
-    # print("***********************************************")
 
     # Generate the figure
     fig = px.line(filtered_df, x='Order Date', y=selected_metric, title=f'{selected_metric} Over Time')
 
     # Update axes labels if needed
-    fig.update_layout(xaxis_title='Order Date', yaxis_title=selected_metric)
+    fig.update_layout(xaxis_title='Order Date', yaxis_title=selected_metric, template='plotly_white')
 
 
     return fig

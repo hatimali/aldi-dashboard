@@ -7,7 +7,6 @@ from preprocess_data.calculate_dashboard_overview import calculate_monthly_sales
 def get_profit_analytics_data(filtered_df, filtered_df_current_year, selected_years):
     preprocessed_data = calculate_profit_overview(filtered_df, selected_years)
     print(f"preprocessed_data profit: {preprocessed_data}")
-    # monthly_profit = calculate_monthly_profit(filtered_df, selected_years)
 
     monthly_profit = calculate_monthly_sales_profit_data(filtered_df, selected_years, column='Profit')
 
@@ -23,7 +22,6 @@ def get_profit_analytics_data(filtered_df, filtered_df_current_year, selected_ye
     fig_top_products = create_top_line_product_figure(top_products, column='Profit')
 
     container = dbc.Container(fluid=True, children=[
-        # Overview cards
         dbc.Row([
             dbc.Col(dbc.Card(
                 className="card-one",
@@ -31,7 +29,7 @@ def get_profit_analytics_data(filtered_df, filtered_df_current_year, selected_ye
                     dbc.CardHeader("Current Year Profit", className='card-header'),
                     dbc.CardBody([
                         html.H4([
-                            html.I(className="fa fa-money fa-icon"),  # Icon with Font Awesome class
+                            html.I(className="fa fa-money fa-icon"),
                             f"${preprocessed_data['profit_current_year']:,.0f}"
                         ], className='card-title'),
                     ])
@@ -42,7 +40,7 @@ def get_profit_analytics_data(filtered_df, filtered_df_current_year, selected_ye
                     dbc.CardHeader("Previous Year Profit", className='card-header'),
                     dbc.CardBody([
                         html.H4([
-                            html.I(className="fa fa-money fa-icon"),  # Icon with Font Awesome class
+                            html.I(className="fa fa-money fa-icon"),
                             f"${preprocessed_data['profit_previous_year']:,.0f}"
                         ], className='card-title'),
                     ])
@@ -53,7 +51,7 @@ def get_profit_analytics_data(filtered_df, filtered_df_current_year, selected_ye
                     dbc.CardHeader("Avg. Profit Per Unit", className='card-header'),
                     dbc.CardBody([
                         html.H4([
-                            html.I(className="fa fa-money fa-icon"),  # Icon with Font Awesome class
+                            html.I(className="fa fa-money fa-icon"),
                             f"${preprocessed_data['average_profit_per_unit']:,.0f}"
                         ], className='card-title'),
                     ])
@@ -64,8 +62,8 @@ def get_profit_analytics_data(filtered_df, filtered_df_current_year, selected_ye
                     dbc.CardHeader("YoY Grwoth %", className='card-header'),
                     dbc.CardBody([
                         html.H4([
-                            html.I(className="fa fa-money fa-icon"),  # Icon with Font Awesome class
-                            f"{preprocessed_data['yoy_growth_current_year'].iloc[0]:,.0f}"
+                            html.I(className="fa fa-money fa-icon"),
+                            f"{preprocessed_data['yoy_growth_current_year'].iloc[0]:,.0f}%"
                         ], className='card-title'),
                     ])
                 ]), width=3),

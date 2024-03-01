@@ -23,50 +23,49 @@ def get_sales_analytics_data(filtered_df, filtered_df_current_year, selected_yea
         # Continue to update other figures...
 
         container = dbc.Container(fluid=True, children=[
-            # Navbar - already defined outside of this function
             # Overview cards
             dbc.Row([
                 dbc.Col(dbc.Card(
-                    className="card-one",  # Apply custom CSS class for styling
+                    className="card-one",
                     children=[
                         dbc.CardHeader("Current Year Sales", className='card-header'),
                         dbc.CardBody([
                             html.H4([
-                                html.I(className="fa fa-money fa-icon"),  # Icon with Font Awesome class
-                                f"${preprocessed_data['sales_current_year']:,.0f}"  # Display total sales
+                                html.I(className="fa fa-money fa-icon"),
+                                f"${preprocessed_data['sales_current_year']:,.0f}"
                             ], className='card-title'),
                         ])
                     ]), width=3),
                 dbc.Col(dbc.Card(
-                    className="card-two",  # Apply custom CSS class for styling
+                    className="card-two",
                     children=[
                         dbc.CardHeader("Previous Year Sales", className='card-header'),
                         dbc.CardBody([
                             html.H4([
-                                html.I(className="fa fa-money fa-icon"),  # Icon with Font Awesome class
-                                f"${preprocessed_data['sales_previous_year']:,.0f}"  # Display total sales
+                                html.I(className="fa fa-money fa-icon"),
+                                f"${preprocessed_data['sales_previous_year']:,.0f}"
                             ], className='card-title'),
                         ])
                     ]), width=3),
                 dbc.Col(dbc.Card(
-                    className="card-three",  # Apply custom CSS class for styling
+                    className="card-three",
                     children=[
                         dbc.CardHeader("Avg. Sales Per Unit", className='card-header'),
                         dbc.CardBody([
                             html.H4([
-                                html.I(className="fa fa-money fa-icon"),  # Icon with Font Awesome class
-                                f"${preprocessed_data['average_sales_per_unit']:,.0f}"  # Display total sales
+                                html.I(className="fa fa-money fa-icon"),
+                                f"${preprocessed_data['average_sales_per_unit']:,.0f}"
                             ], className='card-title'),
                         ])
                     ]), width=3),
                 dbc.Col(dbc.Card(
-                    className="card-four",  # Apply custom CSS class for styling
+                    className="card-four",
                     children=[
                         dbc.CardHeader("YoY Grwoth %", className='card-header'),
                         dbc.CardBody([
                             html.H4([
-                                html.I(className="fa fa-money fa-icon"),  # Icon with Font Awesome class
-                                f"{preprocessed_data['yoy_growth_current_year'].iloc[0]:,.0f}%"  # Display total sales
+                                html.I(className="fa fa-money fa-icon"),
+                                f"{preprocessed_data['yoy_growth_current_year'].iloc[0]:,.0f}%"
                             ], className='card-title'),
                         ])
                     ]), width=3),

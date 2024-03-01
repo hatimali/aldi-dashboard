@@ -30,6 +30,7 @@ def prepare_data(df, df_returns):
 
     # Add a column for Returns based on whether the Order ID is in the df_returns dataframe
     df['Returns'] = df['Order ID'].isin(df_returns['Order ID']).astype(int)
+
     # df['Returns'] = df['Order ID'].isin(df_returns['Order ID']).replace({True: 1, False: 0})
 
     # Add Year and Month columns for filtering purposes

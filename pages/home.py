@@ -12,17 +12,15 @@ from dash.exceptions import PreventUpdate
 
 from preprocess_data.preprocess_home_data import preprocess_data
 
-# Register this file as a Dash page (Dash 2.0 feature)
+# Register this file as a Dash page
 dash.register_page(__name__ , path='/')
 
 
 df = load_data()
 df = preprocess_data(df)
 
-filters = get_filters(df) # get filters for home page
+filters = get_filters(df)
 
-
-# Define the layout for the Home page
 layout = html.Div([
     dbc.Tabs(
         [
@@ -38,12 +36,12 @@ layout = html.Div([
     html.Div(id="tab-content")
 ])
 
-# Callback for updating the content based on the active tab and filters
+
 @callback(
     Output("tab-content", "children"),
     [Input("tabs", "active_tab"),
-     Input("year-filter", "value"),  # Assuming you have year-filter in your create_year_filter function
-     Input("segment-filter", "value")]  # Assuming you have segment-filter in your create_segment_filter function
+     Input("year-filter", "value"),
+     Input("segment-filter", "value")]
 )
 def update_home_content(active_tab, selected_years, selected_segments):
     print(f"Active Tab: {active_tab}, Selected Years: {selected_years}, Selected Segments: {selected_segments}")
@@ -57,10 +55,8 @@ def update_home_content(active_tab, selected_years, selected_segments):
 
 
     filtered_df = df.loc[(df['Year'] >= previous_year) & (df['Year'] <= current_year) & (df['Segment'].isin(selected_segments))]
-    print(f"Filtered DataFrame Shape: {filtered_df.shape}")
     
     filtered_df_current_year = filtered_df[(filtered_df['Year'] == current_year)]
-    print(f"Filtered DataFrame for Current Year Shape: {filtered_df_current_year.shape}")
 
     if active_tab == "tab-1":
         print("tab1")
@@ -71,19 +67,17 @@ def update_home_content(active_tab, selected_years, selected_segments):
     else:
         print("Tab 3")
         return get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
-        # return html.Div("Demographics content or another function to generate this content")
 
 
-# Define a callback for updating the delivery mode pie chart
+
 @callback(
     Output('delivery-mode-pie-chart', 'figure'),
     [Input('toggle-delivery-mode', 'value'),
-     Input('year-filter', 'value'),  # Assuming this filter affects the chart
-     Input('segment-filter', 'value')]  # Assuming this filter affects the chart
+     Input('year-filter', 'value'),
+     Input('segment-filter', 'value')]
 )
 def update_delivery_mode_pie_chart(toggle_value, selected_years, selected_segments):
-    # Apply filters to the DataFrame as needed
+
     filtered_df_current_year = df[(df['Year'].isin(selected_years)) & (df['Segment'].isin(selected_segments))]
 
-    # Call the function to create the pie chart based on the current filter
     return create_delivery_mode_pie_chart(filtered_df_current_year, toggle_value)

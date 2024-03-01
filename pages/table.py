@@ -2,13 +2,11 @@ import os
 import dash
 from dash import html, dcc, dash_table, callback, Input, Output, State
 import numpy as np
-# from dash.dependencies import Input, Output, State
 import pandas as pd
 import dash_bootstrap_components as dbc
 from datetime import datetime as dt
 from components.table.table_layout import generate_unique_options_for_dropdowns
 
-# Assuming 'df' is your DataFrame and already loaded
 from data.data_loader import load_data
 from preprocess_data.preprocess_table_data import preprocess_table_data
 
@@ -23,7 +21,6 @@ COLUMNS = ["Row ID", "Order ID", "Order Date", "Customer Name", "Product Name",
 
 # df = load_data()
 if 'df' not in globals():
-    print("Global found!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
     global df
     df = load_data()  # Function to load the original data
     
@@ -254,17 +251,20 @@ def update_table_content(selected_sub_category, selected_segment, selected_categ
 
         if trigger_id == 'add-row-button' and n_clicks > 0:
             # Validate inputs
-            print("Validating Input")
             if not all([input_row_id, input_order_id, input_customer_name, input_product_name]):
-                return df.to_dict('records'), selected_size, dbc.Alert("Error adding row. The required fields include Row ID, Order ID, Order Date, Customer Name, Product Name.", color="info", is_open=True, 
-                       style={"width": "100%", "text-align": "center", "fontSize": "20px"})
+                return df.to_dict('records'), selected_size, dbc.Alert(
+                    "Error adding row. The required fields include Row ID, Order ID, Order Date, Customer Name, Product Name.",
+                    color="info", is_open=True, 
+                    style={"width": "100%", "text-align": "center", "fontSize": "20px"})
             
 
             row_ids = [item['Row ID'] for item in rows]
             # Check for duplicate Row ID
             if input_row_id in row_ids:
-                return df.to_dict('records'), selected_size, dbc.Alert("Error duplicate ID. Please add unique ID.", color="danger", is_open=True, 
-                       style={"width": "100%", "text-align": "center", "fontSize": "20px"})
+                return df.to_dict('records'), selected_size, dbc.Alert(
+                    "Error duplicate ID. Please add unique ID.", 
+                    color="danger", is_open=True, 
+                    style={"width": "100%", "text-align": "center", "fontSize": "20px"})
             
 
             # Create the new row dictionary
@@ -289,13 +289,13 @@ def update_table_content(selected_sub_category, selected_segment, selected_categ
             rows.append(new_row)
 
             # Save to Excel
-            file_name = os.getcwd()+'\data\Table - EU Superstore.xlsx'
-            df_test = pd.DataFrame(rows, columns=COLUMNS)  
-            # df_test.to_excel('TEST.xls')
-            with pd.ExcelWriter(file_name) as writer:
-                df_test.to_excel(writer, sheet_name='Orders', index=False)
+            # file_name = os.getcwd()+'\data\Table - EU Superstore.xlsx'
+            # df_test = pd.DataFrame(rows, columns=COLUMNS)  
+            # # df_test.to_excel('TEST.xls')
+            # with pd.ExcelWriter(file_name) as writer:
+            #     df_test.to_excel(writer, sheet_name='Orders', index=False)
 
-            print("save it to file")
+            # print("save it to file")
             # Update response
             return df.to_dict('records'), selected_size, dbc.Alert(
                 "Row Added Successfully!", 
