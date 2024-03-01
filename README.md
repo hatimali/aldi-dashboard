@@ -5,8 +5,8 @@ Welcome to the ALDI Store Dashboard! This dashboard aims to help the imaginary g
 ## Features
 
 - [Home]: This feature give you a overview of the data with sales analytics, profit analytics and customer demographics
-- [Feature 2]: This features display the table data with dropdown filters, date filters and you can dynamically add data to your dashboard with some validation.
-- [Feature 3]: The graph page displays the 2 plots.
+- [Table]: This features display the table data with dropdown filters, date filters and you can dynamically add data to your dashboard with some validation.
+- [Graph]: The graph page displays the 2 plots.
 - 1.   On the left side of the page, we have a fitting timeline graph for the following properties: Days to Ship, Discount, Profit, Profit Ratio, Quantity, Returns, Sales
 - 2.   On the right side of the page, we have a Bubble chart that include two-axis dropdowns containing the
 following properties: Days to Ship, Discount, Profit, Profit Ratio, Quantity, Returns, Sales.
