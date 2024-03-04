@@ -17,28 +17,31 @@ By selecting one dropdown, the option should be excluded in the other. Also we h
 To run this application locally, follow these steps:
 
 1. Clone the repository to your local machine.
-2. Navigate to the project directory.
-3. Create and activate a virtual environment:
+2. Navigate to the project data directory.
+3. I have removed the data file from the data directory for privacy concerns so add 'Sample - EU Superstore.xls' file inside the data directory for the project to work. Make sure to use the same file name as mentioned.
+4. Go back to the project main directoy where app.py file is located
+5. Optional but Recommended: Create and activate a virtual environment:
     ```bash
     python -m venv venv
     source venv/bin/activate  # For Linux/macOS
     # or
     .\venv\Scripts\activate   # For Windows
     ```
-4. Install dependencies using `pip install -r requirements.txt`.
-5. Run the application with `python app.py`.
-6. Access the dashboard by visiting `http://localhost:8050` in your web browser.
-7. Explore the Home Page, Table Page, and Graph Page to gain insights into grocery store data and detect potential losses.
+6. Install dependencies using `pip install -r requirements.txt`.
+7. Run the application with `python app.py`.
+8. Access the dashboard by visiting `http://localhost:8050` in your web browser.
+9. Explore the Home Page, Table Page, and Graph Page to gain insights into grocery store data and detect potential losses.
 
 
 ## Dependencies
-
 - Python 3.x
-- Dash
 
-## Usage
+## Extendion
 
-- [Brief instructions on how to use the application].
+- Project can be extended by connecting to a SQL database like Postgres instead of excel data. Also make sure the data is normalized and well structured to avoid redeundany.
+- Data should not be loaded on each page seperately. Infact if we have a database with different entities like Orders, Customers, Products, Order Details, Region. Then sql queries for fetching the required data would be optimal here.
+- Project can have user interactions and customization where user can dynamicaly add or update the data or layout of the application.
+- We can add LRU based cache mechanism to avoid redundant database hits.
 
 ## Contributing
 

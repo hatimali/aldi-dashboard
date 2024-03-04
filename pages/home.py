@@ -1,4 +1,3 @@
-# This file will contain the layout and callbacks for the sales analytics page.
 import dash
 from dash import html, dcc, callback, Input, Output
 import dash_bootstrap_components as dbc

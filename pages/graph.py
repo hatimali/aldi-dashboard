@@ -13,7 +13,6 @@ df = prepare_data(df, df_returns)
 
 date_picker_range, granularity_dropdown, color_category_dropdown  = get_graph_filters_2(df)
 
-# segment_colors = ["Segment", "Ship Mode", "Customer Name", "Category", "SubCategory", "Product Name"]
 # Register this file as a Dash page
 dash.register_page(__name__)
 
@@ -34,7 +33,7 @@ layout = html.Div([
             dbc.Col(width=1),
         ],  className='filter-bar'),
         dbc.Row([
-            dbc.Col(width=1),  # This creates space in the middle
+            dbc.Col(width=1),
             dbc.Col(html.Div([
                 html.Label("Select Metric", className='filter-label'),
                 dcc.Dropdown(
@@ -52,7 +51,7 @@ layout = html.Div([
                     value='Sales'  # Default value
                 ),
             ]), md=3),
-            dbc.Col(width=3),  # This creates space in the middle
+            dbc.Col(width=3),
             dbc.Col(html.Div([
                 html.Label("Select X Axis", className='filter-label'),
                 dcc.Dropdown(
@@ -65,7 +64,7 @@ layout = html.Div([
         dbc.Row([
             dbc.Col(html.Div([
             ]), md=3),
-            dbc.Col(width=4),  # This creates space in the middle
+            dbc.Col(width=4),
             dbc.Col(html.Div([
                 html.Label("Select Y Axis", className='filter-label'),
                 dcc.Dropdown(
@@ -77,10 +76,8 @@ layout = html.Div([
         ]),
         dbc.Row([
             dbc.Col(html.Div([
-                # html.Label("Granularity", className='filter-label'),
-                # granularity_dropdown
             ]), md=3),
-            dbc.Col(width=4),  # This creates space in the middle
+            dbc.Col(width=4),
             dbc.Col(html.Div([
                 html.Label("Select Category", className='filter-label'),
                 color_category_dropdown
@@ -178,14 +175,11 @@ def update_bubble_chart(start_date, end_date, granularity, xaxis_prop, yaxis_pro
      Input('metric-dropdown', 'value')]
 )
 def update_graph(start_date, end_date, granularity, selected_metric):
-    # Filter DataFrame based on the selected date range
 
     print(f"Start date: {start_date}")
     print(f"End date: {end_date}")
     filtered_df = df.loc[(df['Order Date'] >= pd.to_datetime(start_date)) & (df['Order Date'] <= pd.to_datetime(end_date))]
     
-
-    # Set the DataFrame's index to the Order Date
     filtered_df.set_index('Order Date', inplace=True)
 
     if granularity == 'W':
@@ -200,10 +194,8 @@ def update_graph(start_date, end_date, granularity, selected_metric):
     filtered_df = filtered_df.sort_values('Order Date')
 
 
-    # Generate the figure
     fig = px.line(filtered_df, x='Order Date', y=selected_metric, title=f'{selected_metric} Over Time')
 
-    # Update axes labels if needed
     fig.update_layout(xaxis_title='Order Date', yaxis_title=selected_metric, template='plotly_white')
 
 

@@ -16,13 +16,9 @@ COLUMNS = ["Row ID", "Order ID", "Order Date", "Customer Name", "Product Name",
            "Segment", "Category", "Sub-Category", 
            "Country/Region", "State/Province", "City", "Profit"]
 
-
-# df = get_dataframe()
-
-# df = load_data()
 if 'df' not in globals():
     global df
-    df = load_data()  # Function to load the original data
+    df = load_data()
     
 
 
@@ -30,8 +26,6 @@ df = preprocess_table_data(df)
 
 # Register this file as a Dash page
 dash.register_page(__name__)
-
-# input_fields = get_table_input_fields(df)
 
 dropdown_options = generate_unique_options_for_dropdowns(df)
 
@@ -95,7 +89,7 @@ layout = html.Div([
                 id='date-picker-range',
                 min_date_allowed=df['Order Date'].min(),
                 max_date_allowed=df['Order Date'].max(),
-                start_date=dt(2022, 1, 1),  # Default or dynamically set based on your data
+                start_date=dt(2022, 1, 1),
                 end_date=dt(2022, 12, 31),
                 className='mb-3',
             ),
@@ -120,12 +114,9 @@ layout = html.Div([
     dash_table.DataTable(
         id='datatable',
         columns=[{"name": i, "id": i, "deletable": False, "selectable": True} for i in COLUMNS],
-        # columns=[
-        #     {"name": i, "id": i} for i in df.columns if i in ["Row ID", "Order ID", "Order Date", "Customer Name", "Segment", "Category", "Sub-Category", "Product Name", "Country/Region", "State/Province", "City", "Sale", "Profit", "Quantity"]
-        # ],
         data=df.to_dict('records'),
-        editable=True, # Make the table editable
-        row_deletable=False, # Allow rows to be deleted
+        editable=True,
+        row_deletable=False,
         page_size=PAGE_SIZE,
         filter_action="native",
         sort_action="native",
@@ -158,9 +149,7 @@ layout = html.Div([
         dbc.Col(dcc.Input(id='input-country-region', type='text', placeholder='Country/Region', className='form-control')),
         dbc.Col(dcc.Input(id='input-state-province', type='number', placeholder='State/Province', className='form-control')),
         dbc.Col(dcc.Input(id='input-city', type='text', placeholder='City', className='form-control')),
-        # dbc.Col(dcc.Input(id='input-sale', type='text', placeholder='Sale', className='form-control')),
         dbc.Col(dcc.Input(id='input-profit', type='text', placeholder='Profit', className='form-control')),
-        # dbc.Col(dcc.Input(id='input-quantity', type='text', placeholder='Quantity', className='form-control')),
     ], className="mb-3"),
     dbc.Button('Add Row', id='add-row-button', n_clicks=0, color="primary", className="me-1", size="lg"),
 
@@ -250,7 +239,6 @@ def update_table_content(selected_sub_category, selected_segment, selected_categ
         trigger_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
         if trigger_id == 'add-row-button' and n_clicks > 0:
-            # Validate inputs
             if not all([input_row_id, input_order_id, input_customer_name, input_product_name]):
                 return df.to_dict('records'), selected_size, dbc.Alert(
                     "Error adding row. The required fields include Row ID, Order ID, Order Date, Customer Name, Product Name.",
@@ -259,15 +247,12 @@ def update_table_content(selected_sub_category, selected_segment, selected_categ
             
 
             row_ids = [item['Row ID'] for item in rows]
-            # Check for duplicate Row ID
             if input_row_id in row_ids:
                 return df.to_dict('records'), selected_size, dbc.Alert(
                     "Error duplicate ID. Please add unique ID.", 
                     color="danger", is_open=True, 
                     style={"width": "100%", "text-align": "center", "fontSize": "20px"})
             
-
-            # Create the new row dictionary
             new_row = {
                 'Row ID': input_row_id,
                 'Order ID': input_order_id,
@@ -280,23 +265,12 @@ def update_table_content(selected_sub_category, selected_segment, selected_categ
                 'Country/Region': input_country_region,
                 'State/Province': input_state_province,
                 'City': input_city,
-                # 'Sale': input_sale,
                 'Profit': input_profit,
-                # 'Quantity': input_quantity
             }
 
             df.loc[len(df)] = new_row
             rows.append(new_row)
 
-            # Save to Excel
-            # file_name = os.getcwd()+'\data\Table - EU Superstore.xlsx'
-            # df_test = pd.DataFrame(rows, columns=COLUMNS)  
-            # # df_test.to_excel('TEST.xls')
-            # with pd.ExcelWriter(file_name) as writer:
-            #     df_test.to_excel(writer, sheet_name='Orders', index=False)
-
-            # print("save it to file")
-            # Update response
             return df.to_dict('records'), selected_size, dbc.Alert(
                 "Row Added Successfully!", 
                 color="success", 
