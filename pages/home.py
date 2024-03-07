@@ -8,8 +8,9 @@ from components.home.tabs.profit_analytics.profit_analytics import get_profit_an
 from components.home.tabs.sales_analytics.sales_analytics import get_sales_analytics_data
 from data.data_loader import load_data
 from dash.exceptions import PreventUpdate
-
 from preprocess_data.preprocess_home_data import preprocess_data
+import logging
+logger = logging.getLogger()
 
 # Register this file as a Dash page
 dash.register_page(__name__ , path='/')
@@ -58,13 +59,13 @@ def update_home_content(active_tab, selected_years, selected_segments):
     filtered_df_current_year = filtered_df[(filtered_df['Year'] == current_year)]
 
     if active_tab == "tab-1":
-        print("tab1")
+        logger.info('Tab1')
         return get_sales_analytics_data(filtered_df, filtered_df_current_year, selected_years)
     elif active_tab == "tab-2":
-        print("tab2")
+        logger.info('Tab2')
         return get_profit_analytics_data(filtered_df, filtered_df_current_year, selected_years)
     else:
-        print("Tab 3")
+        logger.info('Tab3')
         return get_demographics_data(filtered_df, filtered_df_current_year, selected_years)
 
 

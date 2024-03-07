@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 def create_sidebar():
     return html.Div(
             children=[
-                html.H4("ALDI SÜD", className="display-4"),
+                html.H4("Dash", className="display-4"),
                 html.Hr(),
                 dbc.Nav(
                     [

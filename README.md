@@ -1,16 +1,18 @@
-# Aldi Süd Assignment by Hatim
+# Dashboard built with Python Dash
 
-Welcome to the ALDI Store Dashboard! This dashboard aims to help the imaginary grocery store chain detect sales, profit and customer demographics by providing insights into their data. The data used for this dashboard can be found in the "Sample - Superstore.xlsx" file.
+Welcome to the Sample EU SuperStore Dashboard! 
+
+This Dash dashboard provides interactive visualizations and insights into the Sample SuperStore dataset. It allows users to explore sales data across different dimensions such as time, geography, product categories, customer segments and more.
 
 ## Features
-
-- [Home]: This feature give you a overview of the data with sales analytics, profit analytics and customer demographics
-- [Table]: This features display the table data with dropdown filters, date filters and you can dynamically add data to your dashboard with some validation.
-- [Graph]: The graph page displays the 2 plots.
-- 1.   On the left side of the page, we have a fitting timeline graph for the following properties: Days to Ship, Discount, Profit, Profit Ratio, Quantity, Returns, Sales
-- 2.   On the right side of the page, we have a Bubble chart that include two-axis dropdowns containing the
-following properties: Days to Ship, Discount, Profit, Profit Ratio, Quantity, Returns, Sales.
-By selecting one dropdown, the option should be excluded in the other. Also we have a third dropdown that breaks down the bubble chart and contains the following properties: Segment, Ship Mode, Customer Name, Category, SubCategory, Product Name
+- Home Page:
+    The Home Page of the dashboard presents a strategic overview of the store's sales, profit and customer demographics data with an intuitive and informative interface. Intuitive charts allow for easy year-over-year sales trend analysis, profit analysis and demographic insights making data-driven decision-making both quick and effective.
+- Table Page: 
+    This page displays the table data with multiple hierarchal dropdown filters and date filters. This feature also gives you the flexibility to dynamically add data to your dashboard with some validation and verification.
+- Graph Page:
+    The graph page displays 2 plots side by side. We have date range and granularity filters at the top of the page which act as a parent filters to the data displayed on this page.
+    1. On the left side we have a fitting timeline graph with dynamic metric selection.
+    2. On the right side we have a Bubble chart that include two-axis dynamic dropdowns. By selecting a metric at any axis will result in automatically remove that metic from the other axis. Also we have a third dropdown that breaks down the bubble chart with color segmentation.
 
 ## Installation
 
@@ -25,7 +27,7 @@ To run this application locally, follow these steps:
     python -m venv venv
     source venv/bin/activate  # For Linux/macOS
     # or
-    .\venv\Scripts\activate   # For Windows
+    .venv\Scripts\activate   # For Windows
     ```
 6. Install dependencies using `pip install -r requirements.txt`.
 7. Run the application with `python app.py`.
@@ -42,15 +44,3 @@ To run this application locally, follow these steps:
 - Data should not be loaded on each page seperately. Infact if we have a database with different entities like Orders, Customers, Products, Order Details, Region. Then sql queries for fetching the required data would be optimal here.
 - Project can have user interactions and customization where user can dynamicaly add or update the data or layout of the application.
 - We can add LRU based cache mechanism to avoid redundant database hits.
-
-## Contributing
-
-Contributions are welcome! If you'd like to contribute to this project, please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/your-feature-name`).
-3. Make your changes.
-4. Commit your changes (`git commit -am 'Add some feature'`).
-5. Push to the branch (`git push origin feature/your-feature-name`).
-6. Create a new Pull Request.
-
