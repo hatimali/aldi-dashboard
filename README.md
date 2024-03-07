@@ -44,7 +44,7 @@ To run this application locally, follow these steps:
 ## Dependencies
 - Python 3.x
 
-## Extendion
+## Extension
 
 - Project can be extended by connecting to a SQL database like Postgres instead of excel data. Also make sure the data is normalized and well structured to avoid redeundany.
 - Data should not be loaded on each page seperately. Infact if we have a database with different entities like Orders, Customers, Products, Order Details, Region. Then sql queries for fetching the required data would be optimal here.
