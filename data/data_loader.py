@@ -4,7 +4,7 @@ global_df = None
 
 
 def load_data():
-    file_path = os.getcwd()+'\data\Sample - EU Superstore.xls'
+    file_path = 'data\Sample - EU Superstore.xls'
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"No such file: {file_path}. Current directory: {os.getcwd()}")
     
