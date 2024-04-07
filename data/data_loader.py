@@ -22,7 +22,7 @@ def load_data_for_graph():
     Returns:
     - DataFrame containing the loaded dataset.
     """
-    file_path = os.getcwd()+'\data\Sample - EU Superstore.xls'
+    file_path = 'data\Sample - EU Superstore.xls'
     if not os.path.exists(file_path):
         raise FileNotFoundError(f"No such file: {file_path}. Current directory: {os.getcwd()}")
     
